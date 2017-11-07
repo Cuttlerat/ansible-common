@@ -61,7 +61,7 @@
   user:
     name: "{{ ansible_user }}"
     groups: docker
-  append: yes
+    append: yes
 
 - name: Delete docker installer
   file:
