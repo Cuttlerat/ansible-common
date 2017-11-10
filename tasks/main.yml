@@ -1,4 +1,11 @@
 ---
+- name: Check that ssh key in authorized_keys
+- name: Set authorized key for user ubuntu copying it from current user
+  authorized_key:
+    user: "{{ ansible_ssh_user }}"
+    state: present
+    key: "{{ lookup('file', ansible_ssh_private_key_file + '.pub') }}"
+
 - name: Install dependencies
   package:
     name: "{{ item }}"
@@ -28,28 +35,6 @@
 - name: Install docker
   command: sh /tmp/docker_install.sh
   when: docker_status.rc == 1
-
-  #- name: Add gpg key
-  #  apt_key:
-  #    keyserver: hkp://ha.pool.sks-keyservers.net:80
-  #    id: 58118E89F3A912897C070ADBF76221572C52609D
-  #  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and docker_status.rc == 1
-  #
-  #- name: Add apt repository
-  #  apt_repository:
-  #    repo: "deb https://apt.dockerproject.org/repo ubuntu-{{ ansible_distribution_release }} main"
-  #    update_cache: yes
-  #  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and docker_status.rc == 1
-  #
-  #- name: Install docker on ubuntu/debian
-  #  apt:
-  #    name: docker-engine
-  #    install_recommends: no
-  #  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and docker_status.rc == 1
-  #
-  #- name: Install docker on centos/rhel
-  #  yum: name=docker-ce state=latest
-  #  when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux') and docker_status.rc == 1
 
 - name: Make sure docker is running
   service:
