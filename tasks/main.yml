@@ -1,4 +1,8 @@
 ---
+- name: Install openssl
+  package:
+    name: openssl
+    
 - name: Check that ssh key in authorized_keys
   authorized_key:
     user: "{{ ansible_ssh_user }}"
