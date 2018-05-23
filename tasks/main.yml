@@ -32,13 +32,18 @@
   get_url:
       url: https://get.docker.com
       dest: /tmp/docker_install.sh
-      mode: 0700
+      mode: 0500
       owner: root
   when: docker_status.rc == 1
 
 - name: Install docker
   command: sh /tmp/docker_install.sh
   when: docker_status.rc == 1
+
+- name: Delete docker install script
+  file: 
+    path: /tmp/docker_install.sh
+    state: absent
 
 - name: Check docker-compose is not installed
   command: which docker-compose
